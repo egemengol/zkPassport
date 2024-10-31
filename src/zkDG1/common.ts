@@ -1,5 +1,5 @@
-import { Bytes, Field, UInt8 } from "o1js";
-import { DigestAlgo, lengthOID } from "../common.ts";
+import { Bytes, DynamicProof, Field, Struct, UInt8, Void } from "o1js";
+import { Bytes74, DigestAlgo, lengthOID } from "../common.ts";
 
 /// Exported
 
@@ -69,4 +69,15 @@ function extractBirthday(
   );
 
   return [year, month, day];
+}
+
+export class ZkTD3_PubInput_74 extends Struct({
+  dg1: DG1_TD3,
+  signedAttrs: Bytes74,
+}) {}
+
+export class DynProofZkTD3_74 extends DynamicProof<ZkTD3_PubInput_74, Void> {
+  static override publicInputType = ZkTD3_PubInput_74;
+  static override publicOutputType = Void;
+  static override maxProofsVerified = 0 as const;
 }

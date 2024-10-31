@@ -1,4 +1,14 @@
 import { Bytes, createEcdsa, createForeignCurve, Crypto, UInt8 } from "o1js";
+import { DynamicProof, Hash, Struct, Void, ZkProgram } from "o1js";
+import {
+  Bytes106,
+  Bytes70,
+  Bytes74,
+  Bytes90,
+  DigestAlgo,
+  getSignedAttrsBytes,
+  lengthSignedAttrs,
+} from "../common.ts";
 
 export class Secp256k1 extends createForeignCurve(
   Crypto.CurveParams.Secp256k1,
@@ -21,4 +31,17 @@ function bytesToLimbBE(bytes_: UInt8[]) {
     limb = limb.mul(1n << 8n).add(bytes[i]);
   }
   return limb.seal();
+}
+
+export class ZkSign_PubInput_74_k1 extends Struct({
+  payload: Bytes74,
+  publicKey: Secp256k1,
+  signature: EcdsaSecp256k1,
+}) {}
+
+export class DynProofZkSign74_k1
+  extends DynamicProof<ZkSign_PubInput_74_k1, Void> {
+  static override publicInputType = ZkSign_PubInput_74_k1;
+  static override publicOutputType = Void;
+  static override maxProofsVerified = 0 as const;
 }
