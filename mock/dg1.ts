@@ -1,4 +1,5 @@
 import { faker } from "@faker-js/faker";
+import { encodeBase64 } from "@std/encoding/base64";
 import countries from "i18n-iso-countries";
 import en from "i18n-iso-countries/langs/en.json" with { type: "json" };
 countries.registerLocale(en);
@@ -137,4 +138,11 @@ export function generateDG1(opt: MRZOptions = {}): DG1Output {
     mrz: `${line1}\n${line2}`,
     dg1,
   };
+}
+
+if (import.meta.main) {
+  const got = generateDG1();
+  console.log(got);
+  console.log(got.mrz.slice(0, 44) + got.mrz.slice(45));
+  console.log(encodeBase64(got.dg1));
 }

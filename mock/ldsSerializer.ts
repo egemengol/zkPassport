@@ -1,8 +1,13 @@
 import * as asn1js from "npm:asn1js";
-import { DigestAlgo, getDigestAlgoOID } from "../src/common.ts";
+import {
+  DataGroupNumber,
+  DigestAlgo,
+  getDigestAlgoOID,
+} from "../src/common.ts";
+import { digestFunc } from "./common.ts";
 
 export function prepareLDSSecurityObject(
-  dgHashes: Map<number, Uint8Array>,
+  dgHashes: Map<DataGroupNumber, Uint8Array>,
   hashAlgo: DigestAlgo,
 ): asn1js.Sequence {
   // Sort and convert hash entries to ASN.1 sequences
@@ -68,4 +73,37 @@ export function prepareSignedAttributes(ldsHash: Uint8Array): asn1js.Set {
       }),
     ],
   });
+}
+
+export function mockLdsAndSignedAttrs(
+  dg1: Uint8Array,
+  digestAlgo: DigestAlgo,
+  mockDGs: Set<DataGroupNumber> = new Set(),
+) {
+  const hasher = digestFunc(digestAlgo);
+  const dgHashes = new Map<DataGroupNumber, Uint8Array>();
+
+  const localMockDGs = new Set(mockDGs);
+  // 2 and 14 are mandatory, dg1 is not random.
+  localMockDGs.add(2);
+  localMockDGs.add(14);
+  localMockDGs.delete(1);
+
+  for (const dgNumber of localMockDGs) {
+    const randomData = new Uint8Array(32);
+    crypto.getRandomValues(randomData);
+    dgHashes.set(dgNumber, hasher(randomData));
+  }
+
+  dgHashes.set(1, hasher(dg1));
+
+  const ldsAsn1 = prepareLDSSecurityObject(dgHashes, digestAlgo);
+  const lds = new Uint8Array(ldsAsn1.toBER());
+  const signedAttrsAsn1 = prepareSignedAttributes(hasher(lds));
+  const signedAttrs = new Uint8Array(signedAttrsAsn1.toBER());
+
+  return {
+    lds,
+    signedAttrs,
+  };
 }

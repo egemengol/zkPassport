@@ -7,7 +7,7 @@ import { sha512 } from "@noble/hashes/sha2";
 import { assertEquals } from "jsr:@std/assert";
 
 import testInput from "./ldsSerializer.test.json" with { type: "json" };
-import type { DigestAlgo } from "../src/common.ts";
+import type { DataGroupNumber, DigestAlgo } from "../src/common.ts";
 
 Deno.test("LDS serializer", () => {
   const expected = {
@@ -15,9 +15,9 @@ Deno.test("LDS serializer", () => {
     signedAttributes: decodeBase64(testInput.signedAttributes),
   };
   const dgHashesIntermediate: { [key: string]: string } = testInput.dgHashes;
-  const dgHashes = new Map<number, Uint8Array>(
+  const dgHashes = new Map<DataGroupNumber, Uint8Array>(
     Object.entries(dgHashesIntermediate).map(([key, value]) => [
-      parseInt(key),
+      parseInt(key) as DataGroupNumber,
       decodeBase64(value),
     ]),
   );
