@@ -236,6 +236,7 @@ interface ParsedSOD {
   lds: string;
   signedAttributes: string;
   digestAlgorithm: string;
+  signature: string;
 }
 
 export function parseSodSimpler(sodBytes: Uint8Array): ParsedSOD {
@@ -280,6 +281,10 @@ export function parseSodSimpler(sodBytes: Uint8Array): ParsedSOD {
     value: signedData.signerInfos[0].signedAttrs!.toSchema().valueBlock.value,
   });
 
+  const signature = new Uint8Array(
+    signedData.signerInfos[0].signature.valueBlock.valueHex,
+  );
+
   return {
     dgHashes,
     lds: encodeBase64(
@@ -291,6 +296,7 @@ export function parseSodSimpler(sodBytes: Uint8Array): ParsedSOD {
     digestAlgorithm: getDigestAlgoFromOID(
       signedData.signerInfos[0].digestAlgorithm.algorithmId,
     ),
+    signature: encodeBase64(signature),
   };
 }
 
