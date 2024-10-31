@@ -1,6 +1,10 @@
 ## Current Situation
 
-We can do `DG1 -> LDS -> SignedAttrs` (sort of) and **Signature** verification with the algorithms `o1js` provides. `o1js` upstream already has `secp256r1` which is excellent, thanks to zkSecurity team there.
+We can do `DG1 -> LDS -> SignedAttrs` and **Signature** verification with the algorithms `o1js` provides. `o1js` upstream already has `secp256r1` which is excellent, thanks to zkSecurity team there.
+
+We can read real documents (ID and Passport) with React Native application on both iOS and Android.
+
+We can create mock passports that use o1js supported algorithms so that we can run our circuits.
 
 **Problem 1**: o1js hash implementations currently cover the following algos from SHA family, which needs to be expanded:
 
