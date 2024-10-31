@@ -6,7 +6,7 @@ src = "src"
 title = "zkPassport Docs"
 
 [preprocessor.plantuml]
-plantuml-cmd = "java -jar $(brew --prefix plantuml)/libexec/plantuml.jar"
+plantuml-cmd = "plantuml"
 
 [output.html]
 default-theme = "navy"

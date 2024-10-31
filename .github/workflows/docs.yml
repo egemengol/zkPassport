@@ -1,32 +1,49 @@
-name: docs github pages
-
+name: Deploy
 on:
   push:
     branches:
       - main
-  pull_request:
 
 jobs:
   deploy:
-    runs-on: ubuntu-20.04
-    concurrency:
-      group: ${{ github.workflow }}-${{ github.ref }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # To push a branch
+      pages: write # To push to a GitHub Pages site
+      id-token: write # To update the deployment status
     steps:
-      - uses: actions/checkout@v2
-
-      - name: Setup mdBook
-        uses: peaceiris/actions-mdbook@v2
+      - uses: actions/checkout@v4
         with:
-          mdbook-version: "0.4.10"
-          # mdbook-version: 'latest'
-
-      - name: Build
-        run: mdbook build
-        working-directory: ./docs
-
-      - name: Deploy
-        uses: peaceiris/actions-gh-pages@v3
-        if: ${{ github.ref == 'refs/heads/main' }}
+          fetch-depth: 0
+      - name: Install Java
+        uses: actions/setup-java@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./docs/book
+          distribution: "temurin"
+          java-version: "17"
+      - name: Install PlantUML
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y plantuml
+      - name: Install Rust
+        run: |
+          rustup set profile minimal
+          rustup toolchain install stable
+          rustup default stable
+          echo "$HOME/.cargo/bin" >> $GITHUB_PATH
+          cargo install mdbook mdbook-plantuml
+      - name: Build Book
+        run: |
+          # This assumes your book is in the root of your repository.
+          # Just add a `cd` here if you need to change to another directory.
+          cd docs
+          mdbook build
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          # Upload entire repository
+          path: "docs/book"
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
