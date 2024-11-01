@@ -1,14 +1,6 @@
 import { Bytes, createEcdsa, createForeignCurve, Crypto, UInt8 } from "o1js";
-import { DynamicProof, Hash, Struct, Void, ZkProgram } from "o1js";
-import {
-  Bytes106,
-  Bytes70,
-  Bytes74,
-  Bytes90,
-  DigestAlgo,
-  getSignedAttrsBytes,
-  lengthSignedAttrs,
-} from "../common.ts";
+import { DynamicProof, Struct, Void } from "o1js";
+import { Bytes74 } from "../common.ts";
 
 export class Secp256k1 extends createForeignCurve(
   Crypto.CurveParams.Secp256k1,
