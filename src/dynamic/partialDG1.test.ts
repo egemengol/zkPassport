@@ -6,6 +6,7 @@ import { mockLdsAndSignedAttrs } from "../../mock/ldsSerializer.ts";
 import { PartialDG1 } from "./partialDG1.ts";
 import { DynProofZkTD3_74 } from "../zkDG1/common.ts";
 import { assert } from "jsr:@std/assert";
+import { FeatureFlags } from "o1js";
 
 Deno.test("partial dg1", async (t) => {
   const mock = generateDG1();
@@ -14,6 +15,8 @@ Deno.test("partial dg1", async (t) => {
     DIGEST_ALGO,
     new Set([1, 2, 6, 11, 12, 14]),
   );
+
+  console.log(await FeatureFlags.fromZkProgram(ZkTD3));
 
   const vkDG1 = (await ZkTD3.compile()).verificationKey;
   await PartialDG1.compile();

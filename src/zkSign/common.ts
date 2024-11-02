@@ -1,4 +1,11 @@
-import { Bytes, createEcdsa, createForeignCurve, Crypto, UInt8 } from "o1js";
+import {
+  Bytes,
+  createEcdsa,
+  createForeignCurve,
+  Crypto,
+  FeatureFlags,
+  UInt8,
+} from "o1js";
 import { DynamicProof, Struct, Void } from "o1js";
 import { Bytes74 } from "../common.ts";
 
@@ -36,4 +43,5 @@ export class DynProofZkSign74_k1
   static override publicInputType = ZkSign_PubInput_74_k1;
   static override publicOutputType = Void;
   static override maxProofsVerified = 0 as const;
+  static override featureFlags = FeatureFlags.allMaybe;
 }

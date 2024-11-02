@@ -1,4 +1,4 @@
-import { Bytes } from "o1js";
+import { Bytes, FeatureFlags } from "o1js";
 import { sha3_256 } from "@noble/hashes/sha3";
 
 import { ZkSignSha3_256Secp256k1 } from "../zkSign/sha3_256_secp256k1.ts";
@@ -13,6 +13,8 @@ Deno.test("partial sign", async (t) => {
   const payload = new Uint8Array(74);
   payload[0] = 1;
   const signature = signer.sign(sha3_256(payload));
+
+  console.log(await FeatureFlags.fromZkProgram(ZkSignSha3_256Secp256k1));
 
   const vkSign = (await ZkSignSha3_256Secp256k1.compile()).verificationKey;
   await PartialSign.compile();
