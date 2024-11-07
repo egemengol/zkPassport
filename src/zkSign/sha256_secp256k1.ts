@@ -4,12 +4,12 @@ import { hashToScalar, ZkSign_PubInput_74_k1 } from "./common.ts";
 import { assertEquals } from "jsr:@std/assert";
 import { lengthSignedAttrs } from "../common.ts";
 
-export const DIGEST_ALGO: DigestAlgo = "sha3-256";
+export const DIGEST_ALGO: DigestAlgo = "sha256";
 
 assertEquals(lengthSignedAttrs(DIGEST_ALGO), 74);
 
-export const ZkSignSha3_256Secp256k1 = ZkProgram({
-  name: "sha3-256-secp256k1",
+export const ZkSignSha256Secp256k1 = ZkProgram({
+  name: "sha256-secp256r1",
   publicInput: ZkSign_PubInput_74_k1,
 
   methods: {
@@ -18,7 +18,7 @@ export const ZkSignSha3_256Secp256k1 = ZkProgram({
 
       // deno-lint-ignore require-await
       async method(inp: ZkSign_PubInput_74_k1) {
-        const hash = Hash.SHA3_256.hash(inp.payload);
+        const hash = Hash.SHA2_256.hash(inp.payload);
         const aff = hashToScalar(hash);
         const isValid = inp.signature.verifySignedHash(aff, inp.publicKey);
         isValid.assertTrue("signature validation failed");

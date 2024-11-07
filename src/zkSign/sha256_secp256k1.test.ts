@@ -1,4 +1,4 @@
-import { DIGEST_ALGO, ZkSignSha3_256Secp256k1 } from "./sha3_256_secp256k1.ts";
+import { DIGEST_ALGO, ZkSignSha256Secp256k1 } from "./sha256_secp256k1.ts";
 import { Bytes } from "o1js";
 import { lengthSignedAttrs } from "../common.ts";
 import { SignerSecp256k1 } from "../../mock/signerSecp256k1.ts";
@@ -13,8 +13,8 @@ function randomPayload() {
   return randomData;
 }
 
-Deno.test("zksign sha3_256 secp256k1", async (t) => {
-  await ZkSignSha3_256Secp256k1.compile();
+Deno.test("zksign sha256 secp256k1", async (t) => {
+  await ZkSignSha256Secp256k1.compile();
   const signer = new SignerSecp256k1();
   const publicKey = signer.pubO1;
 
@@ -22,12 +22,12 @@ Deno.test("zksign sha3_256 secp256k1", async (t) => {
     const payload = randomPayload();
     const signature = signer.sign(HASHER(payload));
 
-    const proof = await ZkSignSha3_256Secp256k1.verifySignature({
+    const proof = await ZkSignSha256Secp256k1.verifySignature({
       payload: Bytes.from(payload),
       signature,
       publicKey,
     });
 
-    await ZkSignSha3_256Secp256k1.verify(proof.proof);
+    await ZkSignSha256Secp256k1.verify(proof.proof);
   });
 });

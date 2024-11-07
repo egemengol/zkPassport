@@ -1,4 +1,5 @@
 import { Bytes, UInt8 } from "o1js";
+import { DynamicBytes } from "./primitives/dynamic-bytes.ts";
 
 /*
 The offset of 42 bytes comes from:
@@ -109,9 +110,10 @@ export function assertSubarray(
   needle: UInt8[],
   sizeNeedle: number,
   offset: number,
+  message?: string,
 ): void {
   for (let i = 0; i < sizeNeedle; i += 1) {
-    haystack[offset + i].assertEquals(needle[i]);
+    haystack[offset + i].assertEquals(needle[i], message);
   }
 }
 

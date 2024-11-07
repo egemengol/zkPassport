@@ -6,10 +6,13 @@ import {
 import { sha512 } from "@noble/hashes/sha2";
 import { assertEquals } from "jsr:@std/assert";
 
-import testInput from "./ldsSerializer.test.json" with { type: "json" };
 import type { DataGroupNumber, DigestAlgo } from "../src/common.ts";
 
 Deno.test("LDS serializer", () => {
+  const testFilePath = "./ldsSerializer.test.json";
+  const testFileContent = Deno.readTextFileSync(testFilePath);
+  const testInput = JSON.parse(testFileContent);
+
   const expected = {
     lds: decodeBase64(testInput.lds),
     signedAttributes: decodeBase64(testInput.signedAttributes),
