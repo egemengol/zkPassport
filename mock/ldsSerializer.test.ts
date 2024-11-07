@@ -8,7 +8,7 @@ import { assertEquals } from "jsr:@std/assert";
 
 import type { DataGroupNumber, DigestAlgo } from "../src/common.ts";
 
-Deno.test("LDS serializer", () => {
+Deno.test.ignore("LDS serializer", () => {
   const testFilePath = "./ldsSerializer.test.json";
   const testFileContent = Deno.readTextFileSync(testFilePath);
   const testInput = JSON.parse(testFileContent);

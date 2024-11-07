@@ -1,5 +1,4 @@
 import { Bytes, UInt8 } from "o1js";
-import { DynamicBytes } from "./primitives/dynamic-bytes.ts";
 
 /*
 The offset of 42 bytes comes from:
